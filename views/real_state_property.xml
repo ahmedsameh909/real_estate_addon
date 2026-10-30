@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ======================================================== -->
+    <!-- 1. PROPERTY TREE VIEW (شاشة العرض الشجري/الجدول)         -->
+    <!-- ======================================================== -->
+    <record id="view_real_estate_property_tree" model="ir.ui.view">
+        <field name="name">real.estate.property.tree</field>
+        <field name="model">real.estate.property</field>
+        <field name="arch" type="xml">
+            <list string="Properties">
+                <field name="building_name"/>
+                <field name="owner_id"/>
+                <field name="location"/>
+                <field name="type" widget="badge" decoration-info="type == 'residential'" decoration-warning="type == 'commercial'" decoration-success="type == 'office'"/>
+                <field name="unit_count" string="Total Units"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ======================================================== -->
+    <!-- 2. PROPERTY FORM VIEW (شاشة الإدخال والتفاصيل)           -->
+    <!-- ======================================================== -->
+    <record id="view_real_estate_property_form" model="ir.ui.view">
+        <field name="name">real.estate.property.form</field>
+        <field name="model">real.estate.property</field>
+        <field name="arch" type="xml">
+            <form string="Real Estate Property">
+                <sheet>
+                    <!-- زر ذكي Stat Button أعلى الصفحة لعرض عدد الوحدات -->
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_view_units" icon="fa-th-list">
+                            <field name="unit_count" string="Units" widget="statinfo"/>
+                        </button>
+                    </div>
+
+                    <!-- العنوان الرئيسي للمبنى -->
+                    <div class="oe_title">
+                        <label for="building_name" string="Building Name"/>
+                        <h1>
+                            <field name="building_name" placeholder="e.g. Al-Amal Tower"/>
+                        </h1>
+                    </div>
+
+                    <!-- الحقول الرئيسية مقسمة لعمودين -->
+                    <group>
+                        <group string="Basic Information">
+                            <field name="owner_id"/>
+                            <field name="type"/>
+                        </group>
+                        <group string="Location Details">
+                            <field name="location"/>
+                            <field name="address"/>
+                        </group>
+                    </group>
+
+                    <!-- تبويب عرض الوحدات التابعة للمبنى داخل الفورم -->
+                    <notebook>
+                        <page string="Units" name="units">
+                            <field name="unit_ids">
+                                <list editable="bottom">
+                                    <field name="name" string="Unit Ref"/>
+                                    <field name="area"/>
+                                    <field name="rooms_count"/>
+                                    <field name="currency_id" column_invisible="True"/>
+                                    <field name="rent_price"/>
+                                    <field name="state" widget="badge" 
+                                           decoration-success="state == 'vacant'" 
+                                           decoration-info="state == 'rented'" 
+                                           decoration-warning="state == 'maintenance'"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_real_estate_property" model="ir.actions.act_window">
+        <field name="name">Properties</field>
+        <field name="res_model">real.estate.property</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

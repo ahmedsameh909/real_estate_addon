@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_real_estate_contract_renew_wizard_form" model="ir.ui.view">
+        <field name="name">real.estate.contract.renew.wizard.form</field>
+        <field name="model">real.estate.contract.renew.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Renew Rental Contract">
+                <sheet>
+                    <div class="alert alert-info" role="alert">
+                        Select the renewal period and updated rent. You can automatically generate new payment installments for the extended period.
+                    </div>
+                    <group>
+                        <group string="Contract Details">
+                            <field name="contract_id" readonly="1"/>
+                            <field name="current_end_date"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group string="Renewal Terms">
+                            <field name="renewal_months"/>
+                            <field name="new_end_date"/>
+                            <field name="new_rent_amount"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="generate_payments" widget="boolean_toggle"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_confirm_renewal" 
+                            string="Confirm &amp; Extend Contract" 
+                            type="object" 
+                            class="btn-primary"/>
+                    <button string="Cancel" 
+                            class="btn-secondary" 
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_real_estate_contract_renew_wizard" model="ir.actions.act_window">
+        <field name="name">Renew Contract</field>
+        <field name="res_model">real.estate.contract.renew.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_real_estate_rental_contract"/>
+        <field name="binding_view_types">form</field>
+    </record>
+
+</odoo>

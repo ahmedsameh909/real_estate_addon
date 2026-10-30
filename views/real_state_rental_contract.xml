@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ======================================================== -->
+    <!-- 1. RENTAL CONTRACT TREE VIEW (قائمة عرض العقود)          -->
+    <!-- ======================================================== -->
+    <record id="view_real_estate_rental_contract_tree" model="ir.ui.view">
+        <field name="name">real.estate.rental.contract.tree</field>
+        <field name="model">real.estate.rental.contract</field>
+        <field name="arch" type="xml">
+            <list string="Rental Contracts">
+                <field name="name"/>
+                <field name="tenant_id"/>
+                <field name="unit_id"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="rent_amount"/>
+                <field name="total_contract_value"/>
+                <field name="state" widget="badge" 
+                       decoration-info="state == 'draft'" 
+                       decoration-success="state == 'active'" 
+                       decoration-warning="state == 'renewing'" 
+                       decoration-danger="state == 'expired'" 
+                       decoration-muted="state == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ======================================================== -->
+    <!-- 2. RENTAL CONTRACT FORM VIEW (شاشة نموذج العقد)          -->
+    <!-- ======================================================== -->
+    <record id="view_real_estate_rental_contract_form" model="ir.ui.view">
+        <field name="name">real.estate.rental.contract.form</field>
+        <field name="model">real.estate.rental.contract</field>
+        <field name="arch" type="xml">
+            <form string="Rental Contract">
+                <!-- شريط المراحل والحالات (Header Statusbar) -->
+                <header>
+                    <button name="action_active" type="object" string="Activate" class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_renew" type="object" string="Start Renewal" class="oe_highlight"
+                            invisible="state != 'active'"/>
+                    <button name="action_expire" type="object" string="Mark Expired"
+                            invisible="state not in ('active', 'renewing')"/>
+                    <button name="action_cancel" type="object" string="Cancel" class="btn-danger"
+                            groups="real_state_addon.group_real_estate_general_manager"
+                            invisible="state in ('cancelled', 'expired')"/>
+                    <button name="action_draft" type="object" string="Reset to Draft"
+                            invisible="state not in ('cancelled', 'expired')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,active,renewing,expired"/>
+                </header>
+                <sheet>
+                    <!-- العنوان الرئيسي ورقم العقد التلقائي -->
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+
+                    <!-- تفاصيل العقد مقسمة على عمودين -->
+                    <group>
+                        <group string="Contract &amp; Parties">
+                            <field name="tenant_id"/>
+                            <field name="unit_id"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group string="Dates &amp; Terms">
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="payment_frequency"/>
+                        </group>
+                    </group>
+
+                    <group string="Financial Details">
+                        <group>
+                            <field name="rent_amount"/>
+                        </group>
+                        <group>
+                            <field name="total_contract_value"/>
+                        </group>
+                    </group>
+
+                    <!-- تبويب جدول أقساط الإيجار والمدفوعات -->
+                    <notebook>
+                        <page string="Payment Schedule" name="payments">
+                            <field name="payment_ids">
+                                <list editable="bottom">
+                                    <field name="due_date"/>
+                                    <field name="currency_id" column_invisible="True"/>
+                                    <field name="amount"/>
+                                    <field name="payment_state" widget="badge" 
+                                           decoration-warning="payment_state == 'due'" 
+                                           decoration-success="payment_state == 'paid'" 
+                                           decoration-danger="payment_state == 'overdue'"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <!-- Chatter for Messages, Log notes, and Activities -->
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ======================================================== -->
+    <!-- 3. RENTAL CONTRACT CALENDAR VIEW (تقويم العقود)          -->
+    <!-- ======================================================== -->
+    <record id="view_real_estate_rental_contract_calendar" model="ir.ui.view">
+        <field name="name">real.estate.rental.contract.calendar</field>
+        <field name="model">real.estate.rental.contract</field>
+        <field name="arch" type="xml">
+            <calendar string="Rental Contracts"
+                      date_start="date_start"
+                      date_stop="date_end"
+                      color="state"
+                      mode="month"
+                      quick_create="0">
+                <field name="name"/>
+                <field name="tenant_id"/>
+                <field name="unit_id"/>
+                <field name="rent_amount"/>
+                <field name="state" filters="1"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="action_real_estate_rental_contract" model="ir.actions.act_window">
+        <field name="name">Rental Contracts</field>
+        <field name="res_model">real.estate.rental.contract</field>
+        <field name="view_mode">list,form,calendar</field>
+    </record>
+</odoo>

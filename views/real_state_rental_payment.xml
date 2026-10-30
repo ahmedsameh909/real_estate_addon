@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- 1. RENTAL PAYMENT TREE VIEW -->
+    <record id="view_real_estate_rental_payment_tree" model="ir.ui.view">
+        <field name="name">real.estate.rental.payment.tree</field>
+        <field name="model">real.estate.rental.payment</field>
+        <field name="arch" type="xml">
+            <list string="Rental Payments">
+                <field name="contract_id"/>
+                <field name="due_date"/>
+                <field name="amount"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="payment_state" widget="badge" 
+                       decoration-warning="payment_state == 'due'" 
+                       decoration-success="payment_state == 'paid'" 
+                       decoration-danger="payment_state == 'overdue'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- 2. RENTAL PAYMENT FORM VIEW -->
+    <record id="view_real_estate_rental_payment_form" model="ir.ui.view">
+        <field name="name">real.estate.rental.payment.form</field>
+        <field name="model">real.estate.rental.payment</field>
+        <field name="arch" type="xml">
+            <form string="Rental Payment">
+                <header>
+                    <button name="action_send_overdue_reminder" 
+                            type="object" 
+                            string="Send Reminder" 
+                            class="oe_highlight" 
+                            invisible="payment_state != 'overdue'"/>
+                    <field name="payment_state" widget="statusbar" statusbar_visible="due,paid,overdue"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Payment Information">
+                            <field name="contract_id"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="amount"/>
+                        </group>
+                        <group string="Dates &amp; Status">
+                            <field name="due_date"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- 3. RENTAL PAYMENT SEARCH VIEW -->
+    <record id="view_real_estate_rental_payment_search" model="ir.ui.view">
+        <field name="name">real.estate.rental.payment.search</field>
+        <field name="model">real.estate.rental.payment</field>
+        <field name="arch" type="xml">
+            <search string="Search Payments">
+                <field name="contract_id"/>
+                <field name="due_date"/>
+                <filter string="Due Payments" name="filter_due" domain="[('payment_state', '=', 'due')]"/>
+                <filter string="Paid Payments" name="filter_paid" domain="[('payment_state', '=', 'paid')]"/>
+                <filter string="Overdue Payments" name="filter_overdue" domain="[('payment_state', '=', 'overdue')]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- 4. ACTION WINDOW -->
+    <record id="action_real_estate_rental_payment" model="ir.actions.act_window">
+        <field name="name">Rental Payments</field>
+        <field name="res_model">real.estate.rental.payment</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- 5. SERVER ACTION -->
+    <record id="action_server_send_overdue_reminder" model="ir.actions.server">
+        <field name="name">Send Overdue Reminder</field>
+        <field name="model_id" ref="model_real_estate_rental_payment"/>
+        <field name="binding_model_id" ref="model_real_estate_rental_payment"/>
+        <field name="state">code</field>
+        <field name="code">
+            for record in records:
+                record.action_send_overdue_reminder()
+        </field>
+    </record>
+
+</odoo>

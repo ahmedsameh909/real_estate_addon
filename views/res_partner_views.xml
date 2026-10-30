@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_partner_form_inherit_real_estate" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit.real.estate</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button class="oe_stat_button" type="object" name="action_view_rental_contracts" icon="fa-home">
+                    <div class="o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="active_contract_count"/>
+                        </span>
+                        <span class="o_stat_text">Active Contracts</span>
+                    </div>
+                </button>
+            </div>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ================================================================ -->
+    <!--  1. Demo Partners (Owners & Tenants)                             -->
+    <!-- ================================================================ -->
+    <record id="demo_partner_owner_1" model="res.partner">
+        <field name="name">Nile Real Estate Investment Co.</field>
+        <field name="email">contact@nile-realestate.com</field>
+        <field name="phone">+201000000001</field>
+        <field name="is_company">True</field>
+    </record>
+
+    <record id="demo_partner_owner_2" model="res.partner">
+        <field name="name">Smart Development Holding</field>
+        <field name="email">info@smartdev.com</field>
+        <field name="phone">+201000000002</field>
+        <field name="is_company">True</field>
+    </record>
+
+    <record id="demo_partner_owner_3" model="res.partner">
+        <field name="name">Knowledge Capital Management</field>
+        <field name="email">asset@knowledgehub.com</field>
+        <field name="phone">+201000000003</field>
+        <field name="is_company">True</field>
+    </record>
+
+    <record id="demo_partner_tenant_1" model="res.partner">
+        <field name="name">Tarek El-Sayed (Tenant)</field>
+        <field name="email">tarek.elsayed@example.com</field>
+        <field name="phone">+201200000010</field>
+    </record>
+
+    <record id="demo_partner_tenant_2" model="res.partner">
+        <field name="name">Cairo Retail Group</field>
+        <field name="email">operations@cairoretail.com</field>
+        <field name="phone">+201200000011</field>
+        <field name="is_company">True</field>
+    </record>
+
+    <record id="demo_partner_tenant_3" model="res.partner">
+        <field name="name">Apex Solutions LLC</field>
+        <field name="email">contact@apexsolutions.com</field>
+        <field name="phone">+201200000012</field>
+        <field name="is_company">True</field>
+    </record>
+
+    <record id="demo_partner_tenant_4" model="res.partner">
+        <field name="name">Mona Hassan (Tenant)</field>
+        <field name="email">mona.hassan@example.com</field>
+        <field name="phone">+201200000013</field>
+    </record>
+
+    <record id="demo_partner_tenant_5" model="res.partner">
+        <field name="name">Delta Logistics International</field>
+        <field name="email">admin@deltalogistics.com</field>
+        <field name="phone">+201200000014</field>
+        <field name="is_company">True</field>
+    </record>
+
+    <!-- ================================================================ -->
+    <!--  2. Demo Properties                                              -->
+    <!-- ================================================================ -->
+    <record id="demo_property_nile_towers" model="real.estate.property">
+        <field name="building_name">Nile Towers</field>
+        <field name="address">15 Corniche El Nil, Cairo</field>
+        <field name="owner_id" ref="demo_partner_owner_1"/>
+        <field name="type">residential</field>
+    </record>
+
+    <record id="demo_property_business_park" model="real.estate.property">
+        <field name="building_name">Smart Business Park</field>
+        <field name="address">Ring Road, 6th October City</field>
+        <field name="owner_id" ref="demo_partner_owner_2"/>
+        <field name="type">commercial</field>
+    </record>
+
+    <record id="demo_property_knowledge_hub" model="real.estate.property">
+        <field name="building_name">Knowledge Hub</field>
+        <field name="address">New Cairo, 5th Settlement</field>
+        <field name="owner_id" ref="demo_partner_owner_3"/>
+        <field name="type">office</field>
+    </record>
+
+    <!-- ================================================================ -->
+    <!--  3. Demo Units                                                   -->
+    <!-- ================================================================ -->
+    <record id="demo_unit_apt301" model="real.estate.unit">
+        <field name="name">Apt 301</field>
+        <field name="property_id" ref="demo_property_nile_towers"/>
+        <field name="area">120.0</field>
+        <field name="rooms_count">3</field>
+        <field name="rent_price">8500</field>
+        <field name="state">rented</field>
+    </record>
+
+    <record id="demo_unit_apt302" model="real.estate.unit">
+        <field name="name">Apt 302</field>
+        <field name="property_id" ref="demo_property_nile_towers"/>
+        <field name="area">95.0</field>
+        <field name="rooms_count">2</field>
+        <field name="rent_price">6500</field>
+        <field name="state">vacant</field>
+    </record>
+
+    <record id="demo_unit_apt401" model="real.estate.unit">
+        <field name="name">Apt 401</field>
+        <field name="property_id" ref="demo_property_nile_towers"/>
+        <field name="area">150.0</field>
+        <field name="rooms_count">4</field>
+        <field name="rent_price">12000</field>
+        <field name="state">maintenance</field>
+    </record>
+
+    <record id="demo_unit_shop_a1" model="real.estate.unit">
+        <field name="name">Shop A1</field>
+        <field name="property_id" ref="demo_property_business_park"/>
+        <field name="area">80.0</field>
+        <field name="rooms_count">1</field>
+        <field name="rent_price">15000</field>
+        <field name="state">rented</field>
+    </record>
+
+    <record id="demo_unit_shop_b2" model="real.estate.unit">
+        <field name="name">Shop B2</field>
+        <field name="property_id" ref="demo_property_business_park"/>
+        <field name="area">60.0</field>
+        <field name="rooms_count">1</field>
+        <field name="rent_price">10000</field>
+        <field name="state">vacant</field>
+    </record>
+
+    <record id="demo_unit_shop_c3" model="real.estate.unit">
+        <field name="name">Shop C3</field>
+        <field name="property_id" ref="demo_property_business_park"/>
+        <field name="area">45.0</field>
+        <field name="rooms_count">1</field>
+        <field name="rent_price">7500</field>
+        <field name="state">rented</field>
+    </record>
+
+    <record id="demo_unit_office_101" model="real.estate.unit">
+        <field name="name">Office 101</field>
+        <field name="property_id" ref="demo_property_knowledge_hub"/>
+        <field name="area">200.0</field>
+        <field name="rooms_count">5</field>
+        <field name="rent_price">25000</field>
+        <field name="state">rented</field>
+    </record>
+
+    <record id="demo_unit_office_201" model="real.estate.unit">
+        <field name="name">Office 201</field>
+        <field name="property_id" ref="demo_property_knowledge_hub"/>
+        <field name="area">180.0</field>
+        <field name="rooms_count">4</field>
+        <field name="rent_price">22000</field>
+        <field name="state">vacant</field>
+    </record>
+
+    <record id="demo_unit_office_301" model="real.estate.unit">
+        <field name="name">Office 301</field>
+        <field name="property_id" ref="demo_property_knowledge_hub"/>
+        <field name="area">250.0</field>
+        <field name="rooms_count">6</field>
+        <field name="rent_price">30000</field>
+        <field name="state">rented</field>
+    </record>
+
+    <record id="demo_unit_office_302" model="real.estate.unit">
+        <field name="name">Office 302</field>
+        <field name="property_id" ref="demo_property_knowledge_hub"/>
+        <field name="area">120.0</field>
+        <field name="rooms_count">3</field>
+        <field name="rent_price">18000</field>
+        <field name="state">vacant</field>
+    </record>
+
+    <!-- ================================================================ -->
+    <!--  4. Demo Contracts                                               -->
+    <!-- ================================================================ -->
+    <record id="demo_contract_001" model="real.estate.rental.contract">
+        <field name="name">REC/2025/001</field>
+        <field name="tenant_id" ref="demo_partner_tenant_1"/>
+        <field name="unit_id" ref="demo_unit_apt301"/>
+        <field name="date_start">2025-01-01</field>
+        <field name="date_end">2025-12-31</field>
+        <field name="rent_amount">8500</field>
+        <field name="payment_frequency">monthly</field>
+        <field name="state">active</field>
+    </record>
+
+    <record id="demo_contract_002" model="real.estate.rental.contract">
+        <field name="name">REC/2025/002</field>
+        <field name="tenant_id" ref="demo_partner_tenant_2"/>
+        <field name="unit_id" ref="demo_unit_shop_a1"/>
+        <field name="date_start">2024-07-01</field>
+        <field name="date_end">2025-06-30</field>
+        <field name="rent_amount">15000</field>
+        <field name="payment_frequency">quarterly</field>
+        <field name="state">expired</field>
+    </record>
+
+    <record id="demo_contract_003" model="real.estate.rental.contract">
+        <field name="name">REC/2025/003</field>
+        <field name="tenant_id" ref="demo_partner_tenant_3"/>
+        <field name="unit_id" ref="demo_unit_office_101"/>
+        <field name="date_start">2025-03-01</field>
+        <field name="date_end">2026-02-28</field>
+        <field name="rent_amount">25000</field>
+        <field name="payment_frequency">monthly</field>
+        <field name="state">active</field>
+    </record>
+
+    <record id="demo_contract_004" model="real.estate.rental.contract">
+        <field name="name">REC/2026/001</field>
+        <field name="tenant_id" ref="demo_partner_tenant_4"/>
+        <field name="unit_id" ref="demo_unit_shop_c3"/>
+        <field name="date_start">2026-01-01</field>
+        <field name="date_end">2026-12-31</field>
+        <field name="rent_amount">7500</field>
+        <field name="payment_frequency">monthly</field>
+        <field name="state">renewing</field>
+    </record>
+
+    <record id="demo_contract_005" model="real.estate.rental.contract">
+        <field name="name">REC/2026/002</field>
+        <field name="tenant_id" ref="demo_partner_tenant_5"/>
+        <field name="unit_id" ref="demo_unit_office_301"/>
+        <field name="date_start">2026-06-01</field>
+        <field name="date_end">2027-05-31</field>
+        <field name="rent_amount">30000</field>
+        <field name="payment_frequency">yearly</field>
+        <field name="state">active</field>
+    </record>
+
+    <!-- ================================================================ -->
+    <!--  5. Demo Payments for Contract 001                               -->
+    <!-- ================================================================ -->
+    <record id="demo_payment_001_jan" model="real.estate.rental.payment">
+        <field name="contract_id" ref="demo_contract_001"/>
+        <field name="due_date">2025-01-31</field>
+        <field name="amount">8500</field>
+        <field name="payment_state">paid</field>
+    </record>
+
+    <record id="demo_payment_001_feb" model="real.estate.rental.payment">
+        <field name="contract_id" ref="demo_contract_001"/>
+        <field name="due_date">2025-02-28</field>
+        <field name="amount">8500</field>
+        <field name="payment_state">paid</field>
+    </record>
+
+    <record id="demo_payment_001_mar" model="real.estate.rental.payment">
+        <field name="contract_id" ref="demo_contract_001"/>
+        <field name="due_date">2025-03-31</field>
+        <field name="amount">8500</field>
+        <field name="payment_state">overdue</field>
+    </record>
+
+    <record id="demo_payment_001_apr" model="real.estate.rental.payment">
+        <field name="contract_id" ref="demo_contract_001"/>
+        <field name="due_date">2025-04-30</field>
+        <field name="amount">8500</field>
+        <field name="payment_state">due</field>
+    </record>
+
+</odoo>

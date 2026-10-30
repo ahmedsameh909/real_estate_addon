@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ================================================================ -->
+        <!--  Scheduled Action: 30-day contract expiry reminder               -->
+        <!-- ================================================================ -->
+        <record id="ir_cron_contract_expiry_reminder" model="ir.cron">
+            <field name="name">Real Estate: Contract Expiry Reminder (30 days)</field>
+            <field name="model_id" ref="model_real_estate_rental_contract"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_send_expiry_reminders()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active">True</field>
+            <field name="priority">6</field>
+        </record>
+
+        <!-- ================================================================ -->
+        <!--  Scheduled Action: Mark overdue payments automatically           -->
+        <!-- ================================================================ -->
+        <record id="ir_cron_mark_overdue_payments" model="ir.cron">
+            <field name="name">Real Estate: Auto-Mark Overdue Payments</field>
+            <field name="model_id" ref="model_real_estate_rental_payment"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_mark_overdue()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active">True</field>
+            <field name="priority">5</field>
+        </record>
+
+        <!-- ================================================================ -->
+        <!--  Server Action: Send Overdue Payment Reminder to Tenant          -->
+        <!-- ================================================================ -->
+        <record id="action_send_overdue_reminder" model="ir.actions.server">
+            <field name="name">Send Overdue Payment Reminder</field>
+            <field name="model_id" ref="model_real_estate_rental_payment"/>
+            <field name="binding_model_id" ref="model_real_estate_rental_payment"/>
+            <field name="binding_view_types">list,form</field>
+            <field name="state">code</field>
+            <field name="code">records.action_send_overdue_reminder()</field>
+        </record>
+
+    </data>
+</odoo>

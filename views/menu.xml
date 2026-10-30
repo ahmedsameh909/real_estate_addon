@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- 1. Root Menu App Switcher Item -->
+    <menuitem id="menu_real_estate_root"
+              name="Real Estate"
+              web_icon="real_state_addon,static/description/icon.png"
+              sequence="10"/>
+
+    <!-- 2. Category: Management -->
+    <menuitem id="menu_real_estate_management"
+              name="Management"
+              parent="menu_real_estate_root"
+              sequence="10"/>
+
+    <!-- Sub-menu: Properties -->
+    <menuitem id="menu_real_estate_property"
+              name="Properties"
+              parent="menu_real_estate_management"
+              action="action_real_estate_property"
+              groups="real_state_addon.group_real_estate_property_manager,real_state_addon.group_real_estate_general_manager"
+              sequence="10"/>
+
+    <!-- Sub-menu: Units -->
+    <menuitem id="menu_real_estate_unit"
+              name="Units"
+              parent="menu_real_estate_management"
+              action="action_real_estate_unit"
+              groups="real_state_addon.group_real_estate_property_manager,real_state_addon.group_real_estate_general_manager"
+              sequence="20"/>
+
+    <!-- 3. Category: Contracts & Payments -->
+    <menuitem id="menu_real_estate_rent"
+              name="Contracts"
+              parent="menu_real_estate_root"
+              sequence="20"/>
+
+    <!-- Sub-menu: Rental Contracts -->
+    <menuitem id="menu_real_estate_rental_contract"
+              name="Rental Contracts"
+              parent="menu_real_estate_rent"
+              action="action_real_estate_rental_contract"
+              groups="real_state_addon.group_real_estate_sales_agent,real_state_addon.group_real_estate_accountant,real_state_addon.group_real_estate_general_manager"
+              sequence="10"/>
+
+    <!-- Sub-menu: Rental Payments -->
+    <menuitem id="menu_real_estate_rental_payment"
+              name="Rental Payments"
+              parent="menu_real_estate_rent"
+              action="action_real_estate_rental_payment"
+              groups="real_state_addon.group_real_estate_accountant,real_state_addon.group_real_estate_general_manager"
+              sequence="20"/>
+
+</odoo>

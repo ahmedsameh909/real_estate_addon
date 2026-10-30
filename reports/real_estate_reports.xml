@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================ -->
+    <!--  REPORT 1: Rental Contract PDF                               -->
+    <!-- ============================================================ -->
+    <record id="action_report_rental_contract" model="ir.actions.report">
+        <field name="name">Rental Contract</field>
+        <field name="model">real.estate.rental.contract</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">real_state_addon.report_rental_contract_document</field>
+        <field name="report_file">real_state_addon.report_rental_contract_document</field>
+        <field name="binding_model_id" ref="model_real_estate_rental_contract"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+
+    <template id="report_rental_contract_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <!-- Header -->
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <h2 class="text-primary">RENTAL CONTRACT</h2>
+                                <h4><span t-field="o.name"/></h4>
+                            </div>
+                            <div class="col-6 text-end">
+                                <p>
+                                    <strong>Status:</strong>
+                                    <span t-field="o.state"/>
+                                </p>
+                                <p>
+                                    <strong>Date Issued:</strong>
+                                    <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y')"/>
+                                </p>
+                            </div>
+                        </div>
+
+                        <hr/>
+
+                        <!-- Contract Parties -->
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <h5>Tenant Information</h5>
+                                <p>
+                                    <strong><span t-field="o.tenant_id.name"/></strong><br/>
+                                    <t t-if="o.tenant_id.street">
+                                        <span t-field="o.tenant_id.street"/><br/>
+                                    </t>
+                                    <t t-if="o.tenant_id.city">
+                                        <span t-field="o.tenant_id.city"/>,
+                                    </t>
+                                    <t t-if="o.tenant_id.country_id">
+                                        <span t-field="o.tenant_id.country_id.name"/>
+                                    </t>
+                                    <br/>
+                                    <t t-if="o.tenant_id.phone">
+                                        Phone: <span t-field="o.tenant_id.phone"/>
+                                    </t>
+                                </p>
+                            </div>
+                            <div class="col-6">
+                                <h5>Property &amp; Unit</h5>
+                                <p>
+                                    <strong>Unit:</strong> <span t-field="o.unit_id.name"/><br/>
+                                    <strong>Property:</strong> <span t-field="o.unit_id.property_id.building_name"/><br/>
+                                    <strong>Address:</strong> <span t-field="o.unit_id.property_id.address"/><br/>
+                                    <strong>Area:</strong> <span t-field="o.unit_id.area"/> sqm<br/>
+                                    <strong>Rooms:</strong> <span t-field="o.unit_id.rooms_count"/>
+                                </p>
+                            </div>
+                        </div>
+
+                        <hr/>
+
+                        <!-- Contract Terms -->
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <h5>Contract Terms</h5>
+                                <table class="table table-bordered table-sm">
+                                    <tr>
+                                        <td><strong>Start Date</strong></td>
+                                        <td><span t-field="o.date_start"/></td>
+                                        <td><strong>End Date</strong></td>
+                                        <td><span t-field="o.date_end"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Monthly Rent</strong></td>
+                                        <td><span t-field="o.rent_amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                        <td><strong>Payment Frequency</strong></td>
+                                        <td><span t-field="o.payment_frequency"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total Contract Value</strong></td>
+                                        <td colspan="3">
+                                            <strong>
+                                                <span t-field="o.total_contract_value" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Payment Schedule -->
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <h5>Payment Schedule</h5>
+                                <table class="table table-bordered table-sm">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Due Date</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="o.payment_ids" t-as="p">
+                                            <tr>
+                                                <td><t t-esc="p_index + 1"/></td>
+                                                <td><span t-field="p.due_date"/></td>
+                                                <td><span t-field="p.amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                                <td>
+                                                    <span t-field="p.payment_state"
+                                                          t-att-class="'badge ' + ('bg-success' if p.payment_state == 'paid' else 'bg-danger' if p.payment_state == 'overdue' else 'bg-warning text-dark')"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="table-secondary">
+                                            <td colspan="2"><strong>Total</strong></td>
+                                            <td colspan="2">
+                                                <strong>
+                                                    <span t-field="o.total_contract_value" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Terms & Conditions -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h5>Terms &amp; Conditions</h5>
+                                <ol class="small">
+                                    <li>The tenant agrees to pay the rent on or before the due date specified in the payment schedule.</li>
+                                    <li>Late payments will be subject to a penalty fee as per company policy.</li>
+                                    <li>The tenant is responsible for maintaining the unit in good condition.</li>
+                                    <li>Any modifications to the unit must be approved in writing by the property owner.</li>
+                                    <li>This contract may be renewed upon mutual agreement before the expiry date.</li>
+                                    <li>Early termination requires a 30-day written notice and applicable fees.</li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <!-- Signatures -->
+                        <div class="row mt-5">
+                            <div class="col-6 text-center">
+                                <p>____________________________</p>
+                                <p><strong>Landlord / Authorized Signatory</strong></p>
+                                <p><span t-field="o.unit_id.property_id.owner_id.name"/></p>
+                            </div>
+                            <div class="col-6 text-center">
+                                <p>____________________________</p>
+                                <p><strong>Tenant Signature</strong></p>
+                                <p><span t-field="o.tenant_id.name"/></p>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ============================================================ -->
+    <!--  REPORT 2: Tenant Statement PDF                              -->
+    <!-- ============================================================ -->
+    <record id="action_report_tenant_statement" model="ir.actions.report">
+        <field name="name">Tenant Payment Statement</field>
+        <field name="model">real.estate.rental.contract</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">real_state_addon.report_tenant_statement_document</field>
+        <field name="report_file">real_state_addon.report_tenant_statement_document</field>
+        <field name="binding_model_id" ref="model_real_estate_rental_contract"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+
+    <template id="report_tenant_statement_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <div class="row mb-3">
+                            <div class="col-8">
+                                <h2 class="text-primary">TENANT PAYMENT STATEMENT</h2>
+                                <h5>Contract: <span t-field="o.name"/></h5>
+                            </div>
+                            <div class="col-4 text-end">
+                                <p>Issued: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y')"/></p>
+                            </div>
+                        </div>
+
+                        <hr/>
+
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <p><strong>Tenant:</strong> <span t-field="o.tenant_id.name"/></p>
+                                <p><strong>Unit:</strong> <span t-field="o.unit_id.name"/></p>
+                            </div>
+                            <div class="col-6">
+                                <p><strong>Contract Period:</strong> <span t-field="o.date_start"/> — <span t-field="o.date_end"/></p>
+                                <p><strong>Monthly Rent:</strong> <span t-field="o.rent_amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></p>
+                            </div>
+                        </div>
+
+                        <!-- Summary -->
+                        <t t-set="paid_payments" t-value="o.payment_ids.filtered(lambda p: p.payment_state == 'paid')"/>
+                        <t t-set="overdue_payments" t-value="o.payment_ids.filtered(lambda p: p.payment_state == 'overdue')"/>
+                        <t t-set="due_payments" t-value="o.payment_ids.filtered(lambda p: p.payment_state == 'due')"/>
+
+                        <div class="row mb-3">
+                            <div class="col-4 text-center p-2 border rounded bg-success text-white mx-1">
+                                <h6>Paid</h6>
+                                <h4><t t-esc="len(paid_payments)"/> installments</h4>
+                            </div>
+                            <div class="col-4 text-center p-2 border rounded bg-warning mx-1">
+                                <h6>Upcoming Due</h6>
+                                <h4><t t-esc="len(due_payments)"/> installments</h4>
+                            </div>
+                            <div class="col-3 text-center p-2 border rounded bg-danger text-white mx-1">
+                                <h6>Overdue</h6>
+                                <h4><t t-esc="len(overdue_payments)"/> installments</h4>
+                            </div>
+                        </div>
+
+                        <!-- Paid Payments -->
+                        <t t-if="paid_payments">
+                            <h5 class="text-success">✓ Payments Made</h5>
+                            <table class="table table-bordered table-sm table-success mb-3">
+                                <thead><tr><th>#</th><th>Due Date</th><th>Amount</th></tr></thead>
+                                <tbody>
+                                    <t t-foreach="paid_payments" t-as="p">
+                                        <tr>
+                                            <td><t t-esc="p_index + 1"/></td>
+                                            <td><span t-field="p.due_date"/></td>
+                                            <td><span t-field="p.amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </t>
+
+                        <!-- Overdue Payments -->
+                        <t t-if="overdue_payments">
+                            <h5 class="text-danger">⚠ Overdue Payments</h5>
+                            <table class="table table-bordered table-sm table-danger mb-3">
+                                <thead><tr><th>#</th><th>Due Date</th><th>Amount</th></tr></thead>
+                                <tbody>
+                                    <t t-foreach="overdue_payments" t-as="p">
+                                        <tr>
+                                            <td><t t-esc="p_index + 1"/></td>
+                                            <td><span t-field="p.due_date"/></td>
+                                            <td><span t-field="p.amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </t>
+
+                        <!-- Upcoming -->
+                        <t t-if="due_payments">
+                            <h5 class="text-warning">⏰ Upcoming Payments</h5>
+                            <table class="table table-bordered table-sm mb-3">
+                                <thead><tr><th>#</th><th>Due Date</th><th>Amount</th></tr></thead>
+                                <tbody>
+                                    <t t-foreach="due_payments" t-as="p">
+                                        <tr>
+                                            <td><t t-esc="p_index + 1"/></td>
+                                            <td><span t-field="p.due_date"/></td>
+                                            <td><span t-field="p.amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </t>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>
